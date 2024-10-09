@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Auth\AdminAuthController;
+use App\Http\Controllers\Auth\EmployeeAuthController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,5 +28,24 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::get('/test', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::post('/test', [ProfileController::class, 'update'])->name('test');
 
-require __DIR__.'/auth.php';
+
+Route::prefix('admin')->group(function () {
+    Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('/login', [AdminAuthController::class, 'login']);
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+});
+
+// Employee routes
+Route::prefix('employee')->group(function () {
+    Route::get('/login', [EmployeeAuthController::class, 'showLoginForm'])->name('employee.login');
+    Route::post('/login', [EmployeeAuthController::class, 'login'])->name('employee.login');
+    Route::post('/logout', [EmployeeAuthController::class, 'logout'])->name('employee.logout');
+});
+
+
+
+
+// require __DIR__ . '/auth.php';
