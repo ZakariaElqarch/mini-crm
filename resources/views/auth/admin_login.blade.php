@@ -8,7 +8,7 @@
         <!--begin::Wrapper-->
         <div class="d-flex flex-center flex-column flex-column-fluid px-lg-10 pb-15 pb-lg-20">
             <!--begin::Form-->
-            <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" action="{{ route('employee.login') }}" method="POST">
+            <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" action="{{ route('admin.login') }}" method="POST">
                 @csrf
 
                 <!--begin::Heading-->
@@ -28,7 +28,7 @@
 
                 <!--begin::Input group-->
                 <div class="fv-row mb-8">
-                    <input type="email" placeholder="Email" name="email" value="{{ old('email') }}" autocomplete="off"
+                    <input type="email" placeholder="Email" name="email" value="admin@example.com" autocomplete="off"
                         class="form-control bg-transparent {{ $errors->has('email') ? 'is-invalid' : '' }}" />
                     @if ($errors->has('email'))
                         <div class="invalid-feedback">
@@ -39,7 +39,7 @@
                 <!--end::Input group-->
 
                 <div class="fv-row mb-3">
-                    <input type="password" placeholder="Password" name="password" autocomplete="off"
+                    <input type="password" placeholder="Password" name="password" autocomplete="off" value="password"
                         class="form-control bg-transparent {{ $errors->has('password') ? 'is-invalid' : '' }}" />
                     @if ($errors->has('password'))
                         <div class="invalid-feedback">

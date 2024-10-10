@@ -20,32 +20,14 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return view('admin.dashboard');
+})->middleware(['auth', 'verified'])->name('admin.dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::get('/test', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::post('/test', [ProfileController::class, 'update'])->name('test');
 
 
-Route::prefix('admin')->group(function () {
-    Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
-    Route::post('/login', [AdminAuthController::class, 'login']);
-    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
-});
-
-// Employee routes
-Route::prefix('employee')->group(function () {
-    Route::get('/login', [EmployeeAuthController::class, 'showLoginForm'])->name('employee.login');
-    Route::post('/login', [EmployeeAuthController::class, 'login'])->name('employee.login');
-    Route::post('/logout', [EmployeeAuthController::class, 'logout'])->name('employee.logout');
-});
-
-
-
-
-// require __DIR__ . '/auth.php';
+require __DIR__ . '/auth.php';
