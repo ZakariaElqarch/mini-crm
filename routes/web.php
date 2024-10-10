@@ -16,7 +16,7 @@ use App\Http\Controllers\Auth\EmployeeAuthController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.home');
 });
 
 Route::get('/dashboard', function () {

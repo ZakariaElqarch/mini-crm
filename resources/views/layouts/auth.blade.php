@@ -24,7 +24,7 @@
     <!--end::Global Stylesheets Bundle-->
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon-illizeo.png') }}" />
 
     <!-- Vite Scripts & Styles -->
     @vite(['resources/js/app.js'])
@@ -81,11 +81,11 @@
                 <div class="d-flex flex-center flex-lg-start flex-column">
                     <!--begin::Logo-->
                     <a href="{{ url('/') }}" class="mb-7">
-                        <img alt="Logo" src="{{ asset('assets/media/logos/custom-3.svg') }}" />
+                        <img alt="Logo" src="{{ asset('assets/media/logos/logo-illizeo.png') }}" />
                     </a>
                     <!--end::Logo-->
                     <!--begin::Title-->
-                    <h2 class="text-white fw-normal m-0">Branding tools designed for your business</h2>
+                    <h2 class="text-white fw-normal m-0">Welcome to Your CRM Solution</h2>
                     <!--end::Title-->
                 </div>
                 <!--end::Aside-->

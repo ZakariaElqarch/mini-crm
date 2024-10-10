@@ -1,4 +1,4 @@
-@extends('layouts.auth')
+@extends('layouts.auth') 
 
 @section('content')
 <!--begin::Body-->
@@ -61,6 +61,12 @@
                 <!--end::Submit button-->
             </form>
             <!--end::Form-->
+
+            <!--begin::Link to Admin Login-->
+            <div class="text-center mt-3">
+                <a href="{{ route('admin.login') }}" class="text-primary">Switch to Admin Login</a>
+            </div>
+            <!--end::Link to Admin Login-->
         </div>
         <!--end::Wrapper-->
     </div>
