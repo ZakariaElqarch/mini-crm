@@ -15,7 +15,7 @@ class CreateEmployeesTable extends Migration
             $table->string('fullName');
             $table->date('birthDate');
             $table->string('phone')->nullable();
-            $table->foreignId('companyId')->constrained('companies')->onDelete('cascade');
+            $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
             $table->boolean('verified')->default(false);
             $table->timestamps();
         });

@@ -15,5 +15,11 @@
                 <li class="breadcrumb-item text-muted">@yield('breadcrumb', 'Dashboard')</li>
             </ul>
         </div>
+
+        <div class="d-flex align-items-center gap-2 gap-lg-3">
+            <!--begin::Primary button-->
+            @yield('action')
+            <!--end::Primary button-->
+        </div>
     </div>
 </div>

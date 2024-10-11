@@ -9,7 +9,7 @@ class Employee extends Authenticatable
 {
     use Notifiable;
 
-    protected $fillable = ['email', 'password', 'fullName', 'birthDate', 'phone', 'companyId', 'verified'];
+    protected $fillable = ['email', 'password', 'fullName', 'birthDate', 'phone', 'company_id', 'verified'];
 
     protected $hidden = ['password'];
 

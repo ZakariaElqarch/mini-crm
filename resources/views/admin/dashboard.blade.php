@@ -3,7 +3,7 @@
 
 @section('title', 'Dashboard')
 
-@section('page_title', 'Bidding Dashboard')
+@section('page_title', 'Dashboard')
 
 @section('breadcrumb', 'Dashboards')
 
