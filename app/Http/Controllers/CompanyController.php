@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Exception; // Import Exception for handling errors
 
 class CompanyController extends Controller
 {
@@ -37,11 +38,13 @@ class CompanyController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $this->validateCompany($request);
-
-        Company::create($validatedData);
-
-        return redirect()->route('admin.companies.index')->with('success', 'Company created successfully.');
+        try {
+            $validatedData = $this->validateCompany($request);
+            Company::create($validatedData);
+            return redirect()->route('admin.companies.index')->with('success', 'Company created successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Failed to create company: ' . $e->getMessage());
+        }
     }
 
     public function edit(Company $company)
@@ -51,24 +54,32 @@ class CompanyController extends Controller
 
     public function update(Request $request, Company $company)
     {
-        $validatedData = $this->validateCompany($request, $company->id); // Pass company ID for email validation
+        try {
+            $validatedData = $this->validateCompany($request, $company->id); // Pass company ID for email validation
 
-        if ($this->hasChanges($company, $validatedData)) {
-            $company->update($validatedData);
-            return redirect()->route('admin.companies.index')->with('success', 'Company updated successfully.');
+            if ($this->hasChanges($company, $validatedData)) {
+                $company->update($validatedData);
+                return redirect()->route('admin.companies.index')->with('success', 'Company updated successfully.');
+            }
+
+            return redirect()->back()->with('info', 'No changes were made.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Failed to update company: ' . $e->getMessage());
         }
-
-        return redirect()->back()->with('info', 'No changes were made.');
     }
 
     public function destroy(Company $company)
     {
-        if ($company->employees()->count() > 0) {
-            return redirect()->route('admin.companies.index')->with('error', 'Cannot delete a company with employees.');
-        }
+        try {
+            if ($company->employees()->count() > 0) {
+                return redirect()->route('admin.companies.index')->with('error', 'Cannot delete a company with employees.');
+            }
 
-        $company->delete();
-        return redirect()->route('admin.companies.index')->with('success', 'Company deleted successfully.');
+            $company->delete();
+            return redirect()->route('admin.companies.index')->with('success', 'Company deleted successfully.');
+        } catch (Exception $e) {
+            return redirect()->route('admin.companies.index')->with('error', 'Failed to delete company: ' . $e->getMessage());
+        }
     }
 
     // Private Methods

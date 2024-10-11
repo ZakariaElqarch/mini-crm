@@ -3,7 +3,7 @@
     data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="225px"
     data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_sidebar_mobile_toggle">
     <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
-        <a href="{{ url('/') }}">
+        <a href="{{ route('admin.dashboard') }}">
             <img alt="Logo" src="{{ asset('assets/media/logos/logo-illizeo.png') }}"
                 class="h-25px app-sidebar-logo-default">
             <img alt="Logo" src="{{ asset('assets/media/logos/favicon-illizeo.png') }}"
