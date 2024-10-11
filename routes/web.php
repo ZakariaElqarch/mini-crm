@@ -40,5 +40,6 @@ Route::middleware('auth:admin')->group(function () {
     Route::resource('admin/companies', CompanyController::class)->names('admin.companies');
 });
 
+
 // Include the authentication routes for admin
 require __DIR__ . '/auth.php';
