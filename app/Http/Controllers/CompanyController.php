@@ -51,7 +51,7 @@ class CompanyController extends Controller
 
     public function update(Request $request, Company $company)
     {
-        $validatedData = $this->validateCompany($request);
+        $validatedData = $this->validateCompany($request, $company->id); // Pass company ID for email validation
 
         if ($this->hasChanges($company, $validatedData)) {
             $company->update($validatedData);
@@ -72,10 +72,11 @@ class CompanyController extends Controller
     }
 
     // Private Methods
-    private function validateCompany(Request $request)
+    private function validateCompany(Request $request, $companyId = null)
     {
         return $request->validate([
             'name' => 'required|max:255',
+            'email' => 'required|email|unique:companies,email,' . $companyId, // Adjusted to use the correct table name
             'address' => 'required|max:255',
             'phone' => 'required|numeric',
             'description' => 'nullable|max:500',

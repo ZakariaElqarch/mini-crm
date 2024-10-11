@@ -105,4 +105,5 @@
             toastr.info("{{ session('info') }}"); 
         @endif
     </script>
+  
 @endsection

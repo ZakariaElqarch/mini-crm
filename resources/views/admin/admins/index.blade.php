@@ -1,9 +1,9 @@
 <!-- resources/views/dashboard.blade.php -->
 @extends('layouts.admin')
 
-@section('title', 'Companies')
-@section('page_title', 'Companies')
-@section('breadcrumb', 'Companies')
+@section('title', 'Admins')
+@section('page_title', 'Admins')
+@section('breadcrumb', 'Admins')
 
 @section('action')
     <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_new_ticket"
@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-    <meta name="companies-data-url" content="{{ route('admin.companies.index') }}">
+    <meta name="companies-data-url" content="{{ route('admins.index') }}">
 
     <div id="kt_app_content" class="app-content flex-column-fluid">
         <div id="kt_app_content_container" class="app-container container-xxl">
@@ -35,11 +35,10 @@
                             id="kt_companies_table">
                             <thead>
                                 <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Name</th>
-                                    <th class="min-w-125px">Email</th>
-                                    <th class="min-w-125px">Address</th>
-                                    <th class="min-w-125px">Phone</th>
-                                    <th class="min-w-125px">Number of Employees</th>
+                                    <th class="min-w-125px">email</th>
+                                    <th class="min-w-125px">fullName</th>
+                                    <th class="min-w-125px">birthdate</th>
+                                    <th class="min-w-125px">phone</th>
                                     <th class="min-w-125px">Actions</th>
                                 </tr>
                             </thead>
@@ -53,39 +52,41 @@
         </div>
     </div>
 
+    <!-- Create Admin Modal -->
     <div class="modal fade @if ($errors->any()) show @endif" id="kt_modal_new_ticket" tabindex="-1"
         aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-750px">
             <div class="modal-content rounded">
                 <div class="modal-header pb-0 border-0 justify-content-end">
-                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal"
-                        onclick="clearErrors()">
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal" onclick="clearErrors()">
                         <i class="ki-duotone ki-cross fs-1">
                             <span class="path1"></span>
                             <span class="path2"></span>
                         </i>
                     </div>
                 </div>
+
                 <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
                     <form id="kt_modal_new_ticket_form" class="form fv-plugins-bootstrap5 fv-plugins-framework"
-                        action="{{ route('admin.companies.store') }}" method="POST">
+                        action="{{ route('admins.store') }}" method="POST">
                         @csrf
                         <div class="mb-13 text-center">
-                            <h1 class="mb-3">Create Company</h1>
+                            <h1 class="mb-3">Create Admin</h1>
                         </div>
 
-                        <!-- Name Field -->
+                        <!-- Full Name Field -->
                         <div class="d-flex flex-column mb-8 fv-row">
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="required">Name</span>
+                                <span class="required">Full Name</span>
                             </label>
                             <input type="text"
-                                class="form-control form-control-solid @error('name') is-invalid @enderror"
-                                placeholder="Enter the company name" name="name" value="{{ old('name') }}">
-                            @error('name')
+                                class="form-control form-control-solid @error('fullName') is-invalid @enderror"
+                                placeholder="Enter full name" name="fullName" value="{{ old('fullName') }}">
+                            @error('fullName')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
                         <!-- Email Field -->
                         <div class="d-flex flex-column mb-8 fv-row">
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -93,21 +94,34 @@
                             </label>
                             <input type="email"
                                 class="form-control form-control-solid @error('email') is-invalid @enderror"
-                                placeholder="Enter company email" name="email" value="{{ old('email') }}">
+                                placeholder="Enter admin email" name="email" value="{{ old('email') }}">
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <!-- Address Field -->
+                        <!-- Password Field -->
                         <div class="d-flex flex-column mb-8 fv-row">
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="required">Address</span>
+                                <span class="required">Password</span>
                             </label>
-                            <input type="text"
-                                class="form-control form-control-solid @error('address') is-invalid @enderror"
-                                placeholder="Enter the company address" name="address" value="{{ old('address') }}">
-                            @error('address')
+                            <input type="password"
+                                class="form-control form-control-solid @error('password') is-invalid @enderror"
+                                placeholder="Enter password (min 8 characters)" name="password">
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Birth Date Field -->
+                        <div class="d-flex flex-column mb-8 fv-row">
+                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                <span class="required">Birth Date</span>
+                            </label>
+                            <input type="date"
+                                class="form-control form-control-solid @error('birthDate') is-invalid @enderror"
+                                name="birthDate" value="{{ old('birthDate') }}">
+                            @error('birthDate')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -115,22 +129,12 @@
                         <!-- Phone Field -->
                         <div class="d-flex flex-column mb-8 fv-row">
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="required">Phone</span>
+                                <span class="optional">Phone</span>
                             </label>
                             <input type="text"
                                 class="form-control form-control-solid @error('phone') is-invalid @enderror"
                                 placeholder="00 111 222 333 444" name="phone" value="{{ old('phone') }}">
                             @error('phone')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Description Field -->
-                        <div class="d-flex flex-column mb-8 fv-row">
-                            <label class="fs-6 fw-semibold mb-2">Description</label>
-                            <textarea class="form-control form-control-solid @error('description') is-invalid @enderror" rows="4"
-                                name="description" placeholder="Type your company description">{{ old('description') }}</textarea>
-                            @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -163,7 +167,7 @@
     @endif
 
     <script src="{{ asset('assets/js/custom/apps/support-center/tickets/create.js') }}"></script>
-    <script src="{{ asset('assets/js/companies.js') }}"></script>
+    <script src="{{ asset('assets/js/admins.js') }}"></script>
 
     <!-- Toastr CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
@@ -177,5 +181,8 @@
         @if (session('error'))
             toastr.error("{{ session('error') }}");
         @endif
+
+      
     </script>
 @endsection
+

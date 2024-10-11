@@ -5,8 +5,9 @@ $(document).ready(() => {
         "positionClass": "toast-top-right",
         "timeOut": "5000",
     };
-    // Retrieve the URL for fetching company data from a meta tag
-    const companiesDataUrl = $('meta[name="companies-data-url"]').attr('content');
+
+    // Retrieve the URL for fetching admin data from a meta tag
+    const adminsDataUrl = $('meta[name="companies-data-url"]').attr('content');
 
     // Initialize DataTable with server-side processing
     const initializeDataTable = () => {
@@ -18,22 +19,21 @@ $(document).ready(() => {
             lengthChange: true,
             searching: true,
             ajax: {
-                url: companiesDataUrl,
+                url: adminsDataUrl,
                 type: 'GET',
                 data: (d) => {
                     d.search_name = $('input[data-kt-ecommerce-order-filter="search"]').val();
                 },
                 error: (xhr, error, thrown) => {
                     console.error('Error fetching data:', error, thrown);
-                    toastr.error('Failed to load company data. Please try again.');
+                    toastr.error('Failed to load admin data. Please try again.');
                 }
             },
             columns: [
-                { data: 'name', name: 'name' },
                 { data: 'email', name: 'email' },
-                { data: 'address', name: 'address' },
+                { data: 'fullName', name: 'fullName' },
+                { data: 'birthDate', name: 'birthDate' },
                 { data: 'phone', name: 'phone' },
-                { data: 'employees_count', name: 'employees_count' },
                 {
                     data: 'actions',
                     name: 'actions',
@@ -51,14 +51,14 @@ $(document).ready(() => {
 
     // Add event listener for the search input
     const setupSearchListener = (table) => {
-        $('input[data-kt-ecommerce-order-filter="search"]').on('keyup', () => {
-            table.draw();
+        $('input[data-kt-ecommerce-order-filter="search"]').on('keyup', function () {
+            table.search(this.value).draw();
         });
     };
 
     // Execute the initialization functions
-    const companiesTable = initializeDataTable();
-    setupSearchListener(companiesTable);
+    const adminsTable = initializeDataTable();
+    setupSearchListener(adminsTable);
 
 
 

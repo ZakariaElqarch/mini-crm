@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CompanyController;
@@ -38,6 +39,9 @@ Route::middleware('auth:admin')->group(function () {
 
     // Company Management Routes
     Route::resource('admin/companies', CompanyController::class)->names('admin.companies');
+    
+    // Admin Management Routes
+    Route::resource('admin/admins', AdminController::class);
 });
 
 

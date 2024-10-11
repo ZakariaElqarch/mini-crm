@@ -1,9 +1,9 @@
 <!-- resources/views/dashboard.blade.php -->
 @extends('layouts.admin')
 
-@section('title', 'Companies')
-@section('page_title', 'Companies')
-@section('breadcrumb', 'Companies')
+@section('title', 'Admins')
+@section('page_title', 'Admins')
+@section('breadcrumb', 'Admins')
 
 @section('action')
     <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_new_ticket"
@@ -11,81 +11,95 @@
 @endsection
 
 @section('content')
-    <meta name="companies-data-url" content="{{ route('admin.companies.index') }}">
 
     <div id="kt_app_content" class="app-content flex-column-fluid">
         <div id="kt_app_content_container" class="app-container container-xxl">
-            <div class="card">
-                <div class="card-header align-items-center py-5 gap-2 gap-md-5">
-                    <div class="card-title">
-                        <div class="d-flex align-items-center position-relative my-1">
-                            <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-4">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                            </i>
-                            <input type="text" data-kt-ecommerce-order-filter="search"
-                                class="form-control form-control-solid w-200px ps-12" placeholder="Search">
-                        </div>
+            <div class=" card card-body pt-15">
+                <!--begin::Summary-->
+                <div class="d-flex flex-center flex-column mb-5">
+                    <!--begin::Avatar-->
+                    <div class="symbol symbol-150px symbol-circle mb-7">
+                        <img src="{{ asset('assets/media/avatars/blank.png') }}" alt="image">
                     </div>
+                    <!--end::Avatar-->
+                    <!--begin::Name-->
+                    <div class="fs-3 text-gray-800  fw-bold mb-1">{{ $admin->fullName }}</div>
+                    <!--end::Name-->
+                    <!--begin::Email-->
+                    <div class="fs-5 fw-semibold text-muted  mb-6">{{ $admin->email }}</div>
+                    <!--end::Email-->
                 </div>
-
-                <div class="card-body pt-0">
-                    <div id="kt_customers_table_wrapper" class="dt-container dt-bootstrap5 dt-empty-footer">
-                        <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable w-100"
-                            id="kt_companies_table">
-                            <thead>
-                                <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Name</th>
-                                    <th class="min-w-125px">Email</th>
-                                    <th class="min-w-125px">Address</th>
-                                    <th class="min-w-125px">Phone</th>
-                                    <th class="min-w-125px">Number of Employees</th>
-                                    <th class="min-w-125px">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="fw-semibold text-gray-600">
-                                <!-- Dynamic rows will go here -->
-                            </tbody>
-                        </table>
+                <!--end::Summary-->
+                <!--begin::Details toggle-->
+                <div class="d-flex flex-stack fs-4 py-3">
+                    <div class="fw-bold">Details</div>
+                    <!--begin::Badge-->
+                    <div class="badge badge-light-info d-inline">Admin</div>
+                    <!--begin::Badge-->
+                </div>
+                <!--end::Details toggle-->
+                <div class="separator separator-dashed my-3"></div>
+                <!--begin::Details content-->
+                <div class="pb-5 fs-6">
+                    <!--begin::Details item-->
+                    <div class="fw-bold mt-5">Account ID</div>
+                    <div class="text-gray-600">ID-{{ $admin->id }}</div>
+                    <!--end::Details item-->
+                    <!--begin::Details item-->
+                    <div class="fw-bold mt-5">Email</div>
+                    <div class="text-gray-600">
+                        <div class="text-gray-600">{{ $admin->email }}</div>
                     </div>
+                    <!--end::Details item-->
+                    <!--begin::Details item-->
+                    <div class="fw-bold mt-5">Birth Date</div>
+                    <div class="text-gray-600">{{ $admin->birthDate }}</div>
+                    <!--end::Details item-->
+                    <!--begin::Details item-->
+                    <div class="fw-bold mt-5">Phone</div>
+                    <div class="text-gray-600">{{ $admin->phone ?? 'Not provided' }}</div>
+                    <!--end::Details item-->
                 </div>
+                <!--end::Details content-->
             </div>
         </div>
     </div>
 
+    <!-- Create Admin Modal -->
     <div class="modal fade @if ($errors->any()) show @endif" id="kt_modal_new_ticket" tabindex="-1"
         aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-750px">
             <div class="modal-content rounded">
                 <div class="modal-header pb-0 border-0 justify-content-end">
-                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal"
-                        onclick="clearErrors()">
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <i class="ki-duotone ki-cross fs-1">
                             <span class="path1"></span>
                             <span class="path2"></span>
                         </i>
                     </div>
                 </div>
+
                 <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
                     <form id="kt_modal_new_ticket_form" class="form fv-plugins-bootstrap5 fv-plugins-framework"
-                        action="{{ route('admin.companies.store') }}" method="POST">
+                        action="{{ route('admins.store') }}" method="POST">
                         @csrf
                         <div class="mb-13 text-center">
-                            <h1 class="mb-3">Create Company</h1>
+                            <h1 class="mb-3">Create Admin</h1>
                         </div>
 
-                        <!-- Name Field -->
+                        <!-- Full Name Field -->
                         <div class="d-flex flex-column mb-8 fv-row">
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="required">Name</span>
+                                <span class="required">Full Name</span>
                             </label>
                             <input type="text"
-                                class="form-control form-control-solid @error('name') is-invalid @enderror"
-                                placeholder="Enter the company name" name="name" value="{{ old('name') }}">
-                            @error('name')
+                                class="form-control form-control-solid @error('fullName') is-invalid @enderror"
+                                placeholder="Enter full name" name="fullName" value="{{ old('fullName') }}" required>
+                            @error('fullName')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
                         <!-- Email Field -->
                         <div class="d-flex flex-column mb-8 fv-row">
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -93,21 +107,34 @@
                             </label>
                             <input type="email"
                                 class="form-control form-control-solid @error('email') is-invalid @enderror"
-                                placeholder="Enter company email" name="email" value="{{ old('email') }}">
+                                placeholder="Enter admin email" name="email" value="{{ old('email') }}" required>
                             @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <!-- Address Field -->
+                        <!-- Password Field -->
                         <div class="d-flex flex-column mb-8 fv-row">
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="required">Address</span>
+                                <span class="required">Password</span>
                             </label>
-                            <input type="text"
-                                class="form-control form-control-solid @error('address') is-invalid @enderror"
-                                placeholder="Enter the company address" name="address" value="{{ old('address') }}">
-                            @error('address')
+                            <input type="password"
+                                class="form-control form-control-solid @error('password') is-invalid @enderror"
+                                placeholder="Enter password (min 8 characters)" name="password" required>
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Birth Date Field -->
+                        <div class="d-flex flex-column mb-8 fv-row">
+                            <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                <span class="required">Birth Date</span>
+                            </label>
+                            <input type="date"
+                                class="form-control form-control-solid @error('birthDate') is-invalid @enderror"
+                                name="birthDate" value="{{ old('birthDate') }}" required>
+                            @error('birthDate')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -115,22 +142,12 @@
                         <!-- Phone Field -->
                         <div class="d-flex flex-column mb-8 fv-row">
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                <span class="required">Phone</span>
+                                <span class="optional">Phone</span>
                             </label>
                             <input type="text"
                                 class="form-control form-control-solid @error('phone') is-invalid @enderror"
                                 placeholder="00 111 222 333 444" name="phone" value="{{ old('phone') }}">
                             @error('phone')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Description Field -->
-                        <div class="d-flex flex-column mb-8 fv-row">
-                            <label class="fs-6 fw-semibold mb-2">Description</label>
-                            <textarea class="form-control form-control-solid @error('description') is-invalid @enderror" rows="4"
-                                name="description" placeholder="Type your company description">{{ old('description') }}</textarea>
-                            @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -151,6 +168,7 @@
             </div>
         </div>
     </div>
+
 @endsection
 
 @section('scripts')
@@ -162,13 +180,11 @@
         </script>
     @endif
 
-    <script src="{{ asset('assets/js/custom/apps/support-center/tickets/create.js') }}"></script>
-    <script src="{{ asset('assets/js/companies.js') }}"></script>
-
     <!-- Toastr CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <!-- Toastr JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <script>
         @if (session('success'))
             toastr.success("{{ session('success') }}");
