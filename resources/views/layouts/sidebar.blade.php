@@ -64,7 +64,7 @@
                     <!--end:Menu item-->
                     <!--begin:Menu item-->
                     <div class="menu-item ">
-                        <a href="#">
+                        <a href="{{ route('employee.index') }}">
                             <!--begin:Menu link-->
                             <span class="menu-link">
                                 <span class="menu-icon">

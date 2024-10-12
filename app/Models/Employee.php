@@ -23,4 +23,9 @@ class Employee extends Authenticatable
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function invitation()
+    {
+        return $this->hasOne(Invitation::class);
+    }
 }

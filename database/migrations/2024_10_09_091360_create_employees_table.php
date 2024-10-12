@@ -11,12 +11,12 @@ class CreateEmployeesTable extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->string('email')->unique();
-            $table->string('password');
-            $table->string('fullName');
-            $table->date('birthDate');
-            $table->string('phone')->nullable();
+            $table->string('password')->nullable(); // Optional; set when the employee confirms their profile
+            $table->string('fullName')->nullable(); // Optional; can be set when the employee completes their profile
+            $table->date('birthDate')->nullable(); // Optional; set during profile completion
+            $table->string('phone')->nullable(); // Optional; set during profile completion
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
-            $table->boolean('verified')->default(false);
+            $table->boolean('verified')->default(false); // Default to true since they are invited
             $table->timestamps();
         });
     }

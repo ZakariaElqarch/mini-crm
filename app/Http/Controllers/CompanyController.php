@@ -12,7 +12,9 @@ class CompanyController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Company::withCount('employees');
+            $query = Company::withCount(['employees' => function ($query) {
+                $query->where('verified', true);
+            }]);
 
             // Search functionality
             if ($request->has('search_name') && !empty($request->input('search_name'))) {

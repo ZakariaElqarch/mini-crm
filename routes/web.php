@@ -1,9 +1,13 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminEmployeeController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\EmployeeController;
+use App\Mail\EmployeeInviteMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,10 +43,20 @@ Route::middleware('auth:admin')->group(function () {
 
     // Company Management Routes
     Route::resource('admin/companies', CompanyController::class)->names('admin.companies');
-    
+
     // Admin Management Routes
     Route::resource('admin/admins', AdminController::class);
+
+    // Employee Management Routes
+    Route::resource('admin/employee', AdminEmployeeController::class);
+    Route::post('/admin/invitations/{id}/cancel', [AdminEmployeeController::class, 'cancelInvitation'])->name('admin.invitations.cancel');
+
+    // Invite employee via email
+    // Mail::to($invitation->email)->send(new EmployeeInviteMail($invitation));
 });
+
+Route::get('/invite/validate/{token}', [EmployeeController::class, 'validateInvitation'])->name('invite.validate');
+Route::post('/invite/complete/{token}', [EmployeeController::class, 'completeProfile'])->name('invite.complete');
 
 
 // Include the authentication routes for admin
