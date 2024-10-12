@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminEmployeeController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HistoryLogController;
 use App\Http\Controllers\InvitationController;
@@ -31,9 +32,7 @@ Route::get('/', function () {
 Route::middleware('auth:admin')->group(function () {
 
     // Admin Dashboard
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/admin/dashboard', [DashboardController::class, 'showDashboard'])->name('admin.dashboard');
 
     // Profile Management for Admins
     Route::prefix('admin/profile')->name('admin.profile.')->group(function () {
@@ -54,9 +53,6 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::resource('admin/history', HistoryLogController::class);
 
-
-    // Invite employee via email
-    // Mail::to($invitation->email)->send(new EmployeeInviteMail($invitation));
 });
 
 Route::get('/invite/validate/{token}', [InvitationController::class, 'validateInvitation'])->name('invite.validate');
