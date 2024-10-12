@@ -20,7 +20,7 @@ class InvitationController extends Controller
 
         // Handle invalid or already validated/canceled invitations
         if (!$invitation || in_array($invitation->status, ['validated', 'canceled'])) {
-            return redirect()->route('home')->with('error', 'Invalid invitation link.');
+            abort(404);
         }
 
         // Update invitation status to 'validated'

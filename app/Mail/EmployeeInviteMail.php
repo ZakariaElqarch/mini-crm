@@ -52,7 +52,7 @@ class EmployeeInviteMail extends Mailable
             view: 'mail.invite',
             with: [
                 'company' => $this->company->name, // Use company from the constructor
-                'admin_name' => $this->admin->name, // Use admin from the constructor
+                'admin_name' => $this->admin->fullName, // Use admin from the constructor
                 'inviteUrl' => route('invite.validate', ['token' => $this->invitation->token]),
                 'logo_url' => 'assets/media/logos/logo-illizeo.png', // Update this with your actual logo path
             ],

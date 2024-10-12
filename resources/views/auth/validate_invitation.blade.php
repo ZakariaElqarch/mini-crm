@@ -99,12 +99,6 @@
                     <!--end::Submit button-->
                 </form>
                 <!--end::Form-->
-
-                <!--begin::Link to Admin Login-->
-                <div class="text-center mt-3">
-                    <a href="{{ route('employee.login') }}" class="text-primary">Switch to Employee Login</a>
-                </div>
-                <!--end::Link to Admin Login-->
             </div>
             <!--end::Wrapper-->
         </div>

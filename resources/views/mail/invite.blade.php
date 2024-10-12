@@ -15,7 +15,7 @@
                 <tr>
                     <td align="center" valign="center" style="text-align:center; padding: 40px">
                         {{-- <a href="https://illizeo.com" rel="noopener" target="_blank"> --}}
-                            <img alt="Logo" src="{{ $logo_url }}" />
+                            <img alt="Logo" src="https://illizeo.com/wp-content/uploads/2021/12/logo-illizeo-vectorise-infomaniak.png" />
                         {{-- </a> --}}
                     </td>
                 </tr>
