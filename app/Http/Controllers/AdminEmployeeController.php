@@ -121,7 +121,7 @@ class AdminEmployeeController extends Controller
                 'admin_id' => $admin->id,
                 'employee_id' => $employee->id,
                 'action' => 'send_invitation',
-                'description' => 'Admin "' . $admin->name . '" invited employee "' . $validatedData['fullName'] . '" with email "' . $validatedData['email'] . '".'
+                'description' => 'Admin "' . $admin->fullName . '" invited employee "' . $validatedData['fullName'] . '" with email "' . $validatedData['email'] . '".'
             ]);
         });
 

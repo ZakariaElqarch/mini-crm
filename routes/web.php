@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EmployeeController;
-use App\Mail\EmployeeInviteMail;
+use App\Http\Controllers\HistoryLogController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -50,6 +50,9 @@ Route::middleware('auth:admin')->group(function () {
     // Employee Management Routes
     Route::resource('admin/employee', AdminEmployeeController::class);
     Route::post('/admin/invitations/{id}/cancel', [AdminEmployeeController::class, 'cancelInvitation'])->name('admin.invitations.cancel');
+
+    Route::resource('admin/history', HistoryLogController::class);
+
 
     // Invite employee via email
     // Mail::to($invitation->email)->send(new EmployeeInviteMail($invitation));

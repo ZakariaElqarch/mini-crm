@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HistoryLog;
 use Illuminate\Http\Request;
 
 class HistoryLogController extends Controller
@@ -11,7 +12,10 @@ class HistoryLogController extends Controller
      */
     public function index()
     {
-        //
+        // Fetch all history logs, optionally with relationships like admin and employee
+        $historyLogs = HistoryLog::with(['admin', 'employee'])->orderBy('created_at', 'desc')->get();
+        // Pass the history logs to a view
+        return view('admin.history.index', compact('historyLogs'));
     }
 
     /**
