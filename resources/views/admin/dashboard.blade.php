@@ -25,13 +25,13 @@
                     </div>
 
                     <!-- Card for Employees -->
-                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-center border-0 h-md-50 mb-5 mb-xl-10 hover-elevate-up"
-                        style="background-color: #080655">
+                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-center border-0 h-md-50 mb-5 mb-xl-10 hover-elevate-up  bg-primary "
+                        >
                         <div class="card-header pt-5">
                             <div class="card-title d-flex flex-column">
                                 <span
                                     class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ $totalVerifiedEmployees + $totalUnVerifiedEmployees }}</span>
-                                <span class="text-white opacity-50 pt-1 fw-semibold fs-6">Employees</span>
+                                <span class="text-white  pt-1 fw-semibold fs-6">Employees</span>
                             </div>
                         </div>
                         <div class="card-body d-flex align-items-end pt-0">
@@ -39,10 +39,16 @@
                                 @php
                                     $totalEmployees = $totalVerifiedEmployees + $totalUnVerifiedEmployees;
                                     $percentageVerified = $totalEmployees > 0 ? ($totalVerifiedEmployees / $totalEmployees) * 100 : 0;
+                                    $percentageUnVerified = $totalEmployees > 0 ? ($totalUnVerifiedEmployees / $totalEmployees) * 100 : 0;
+
                                 @endphp
-                                <div class="d-flex justify-content-between fw-bold fs-6 text-white opacity-50 w-100 mt-auto mb-2">
-                                    <span>{{ $totalUnVerifiedEmployees }} Pending</span>
+                                <div class="d-flex justify-content-between fw-bold fs-6 text-white  w-100 mt-auto mb-2">
+                                    <span>{{ $totalVerifiedEmployees }} Active</span>
                                     <span>{{ number_format($percentageVerified, 2) }}%</span>
+                                </div>
+                                <div class="d-flex justify-content-between fw-bold fs-6 text-white  w-100 mt-auto mb-2">
+                                    <span>{{ $totalUnVerifiedEmployees }} Pending</span>
+                                    <span>{{ number_format($percentageUnVerified, 2) }}%</span>
                                 </div>
                                 <div class="h-8px mx-3 w-100 bg-light-danger rounded">
                                     <div class="bg-danger rounded h-8px" role="progressbar"
@@ -59,28 +65,28 @@
                 <!--begin::Col for Companies and Admins-->
                 <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
                     <!-- Card for Companies -->
-                    <div class="card card-flush h-md-50 mb-5 mb-xl-10 hover-elevate-up" style="background-color: #DFFFEA">
+                    <div class="card card-flush h-md-50 mb-5 mb-xl-10 hover-elevate-up" style="background: linear-gradient(112.14deg, #00D2FF 0%, #3A7BD5 100%)">
                         <div class="card-header pt-5">
                             <div class="card-title d-flex flex-column">
-                                <span class="fs-2hx fw-bold text-gray-800">{{ $totalCompanies }}</span>
-                                <span class="text-gray-800 opacity-50 pt-1 fw-semibold fs-6">Companies</span>
+                                <span class="fs-2hx fw-bold text-white">{{ $totalCompanies }}</span>
+                                <span class="text-white  pt-1 fw-semibold fs-6">Companies</span>
                             </div>
                         </div>
                         <div class="card-body d-flex align-items-end pt-0">
-                            <p class="text-muted">Total number of companies in the system.</p>
+                            <p class="text-white">Total number of companies in the system.</p>
                         </div>
                     </div>
 
                     <!-- Card for Admins -->
-                    <div class="card card-flush h-lg-50 hover-elevate-up" style="background-color: #FFF8DD">
+                    <div class="card card-flush h-lg-50 hover-elevate-up" style="background-color: #1C325E">
                         <div class="card-header pt-5">
                             <div class="card-title d-flex flex-column">
-                                <span class="fs-2hx fw-bold text-gray-800">{{ $totalAdmins }}</span>
-                                <span class="text-gray-800 opacity-50 pt-1 fw-semibold fs-6">Admins</span>
+                                <span class="fs-2hx fw-bold text-white">{{ $totalAdmins }}</span>
+                                <span class="text-white  pt-1 fw-semibold fs-6">Admins</span>
                             </div>
                         </div>
                         <div class="card-body d-flex align-items-end pt-0">
-                            <p class="text-muted">Total number of admins managing the system.</p>
+                            <p class="text-white">Total number of admins managing the system.</p>
                         </div>
                     </div>
                 </div>

@@ -61,3 +61,8 @@ Route::post('/invite/complete/{token}', [InvitationController::class, 'completeP
 
 // Include the authentication routes for admin
 require __DIR__ . '/auth.php';
+
+
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
+});
