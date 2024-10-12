@@ -6,10 +6,9 @@
 @section('breadcrumb', 'Companies')
 
 @section('action')
-    <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_new_ticket"
+    <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_new_comapny"
         class="btn btn-primary fw-bold fs-8 fs-lg-base">Create</a>
 @endsection
-
 @section('content')
     <meta name="companies-data-url" content="{{ route('admin.companies.index') }}">
 
@@ -53,7 +52,7 @@
         </div>
     </div>
 
-    <div class="modal fade @if ($errors->any()) show @endif" id="kt_modal_new_ticket" tabindex="-1"
+    <div class="modal fade @if ($errors->any()) show @endif" id="kt_modal_new_comapny" tabindex="-1"
         aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-750px">
             <div class="modal-content rounded">
@@ -67,7 +66,7 @@
                     </div>
                 </div>
                 <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
-                    <form id="kt_modal_new_ticket_form" class="form fv-plugins-bootstrap5 fv-plugins-framework"
+                    <form id="kt_modal_new_comapny_form" class="form fv-plugins-bootstrap5 fv-plugins-framework"
                         action="{{ route('admin.companies.store') }}" method="POST">
                         @csrf
                         <div class="mb-13 text-center">
@@ -86,6 +85,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
                         <!-- Email Field -->
                         <div class="d-flex flex-column mb-8 fv-row">
                             <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
@@ -137,9 +137,9 @@
 
                         <!-- Actions -->
                         <div class="text-center">
-                            <button type="reset" id="kt_modal_new_ticket_cancel" class="btn btn-light me-3"
+                            <button type="reset" id="kt_modal_new_comapny_cancel" class="btn btn-light me-3"
                                 data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" id="kt_modal_new_ticket_submit" class="btn btn-primary">
+                            <button type="submit" id="kt_modal_new_comapny_submit" class="btn btn-primary">
                                 <span class="indicator-label">Submit</span>
                                 <span class="indicator-progress">Please wait...
                                     <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -157,7 +157,8 @@
     @if ($errors->any())
         <script>
             $(document).ready(function() {
-                $('#kt_modal_new_ticket').modal('show');
+                console.log('==============================')
+                $('#kt_modal_new_comapny').modal('show');
             });
         </script>
     @endif

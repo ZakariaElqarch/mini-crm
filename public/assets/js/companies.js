@@ -64,7 +64,7 @@ $(document).ready(() => {
 
     function clearErrors() {
         // Clear form fields
-        $('#kt_modal_new_ticket_form')[0].reset();
+        $('#kt_modal_new_comapny_form')[0].reset();
 
         // Remove error classes and messages
         $('.form-control').removeClass('is-invalid');
@@ -72,7 +72,7 @@ $(document).ready(() => {
     }
 
     // Clear errors when modal is closed
-    $('#kt_modal_new_ticket').on('hidden.bs.modal', function () {
+    $('#kt_modal_new_comapny').on('hidden.bs.modal', function () {
         clearErrors();
     });
 });

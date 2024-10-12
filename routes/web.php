@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HistoryLogController;
+use App\Http\Controllers\InvitationController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -58,8 +59,8 @@ Route::middleware('auth:admin')->group(function () {
     // Mail::to($invitation->email)->send(new EmployeeInviteMail($invitation));
 });
 
-Route::get('/invite/validate/{token}', [EmployeeController::class, 'validateInvitation'])->name('invite.validate');
-Route::post('/invite/complete/{token}', [EmployeeController::class, 'completeProfile'])->name('invite.complete');
+Route::get('/invite/validate/{token}', [InvitationController::class, 'validateInvitation'])->name('invite.validate');
+Route::post('/invite/complete/{token}', [InvitationController::class, 'completeProfile'])->name('invite.complete');
 
 
 // Include the authentication routes for admin

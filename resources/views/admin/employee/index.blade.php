@@ -6,7 +6,7 @@
 @section('breadcrumb', 'Employees')
 
 @section('action')
-    <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_new_ticket"
+    <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_new_employee"
         class="btn btn-primary fw-bold fs-8 fs-lg-base">Invite</a>
 @endsection
 
@@ -53,7 +53,7 @@
         </div>
     </div>
 
-    <div class="modal fade @if ($errors->any()) show @endif" id="kt_modal_new_ticket" tabindex="-1"
+    <div class="modal fade @if ($errors->any()) show @endif" id="kt_modal_new_employee" tabindex="-1"
         aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered mw-750px">
             <div class="modal-content rounded">
@@ -119,9 +119,9 @@
 
                         <!-- Actions -->
                         <div class="text-center">
-                            <button type="reset" id="kt_modal_new_ticket_cancel" class="btn btn-light me-3"
+                            <button type="reset" id="kt_modal_new_employee_cancel" class="btn btn-light me-3"
                                 data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" id="kt_modal_new_ticket_submit" class="btn btn-primary">
+                            <button type="submit" id="kt_modal_new_employee_submit" class="btn btn-primary">
                                 <span class="indicator-label">Submit</span>
                                 <span class="indicator-progress">Please wait...
                                     <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -139,7 +139,7 @@
     @if ($errors->any())
         <script>
             $(document).ready(function() {
-                $('#kt_modal_new_ticket').modal('show');
+                $('#kt_modal_new_employee').modal('show');
             });
         </script>
     @endif

@@ -58,7 +58,8 @@
         <div class="modal-dialog modal-dialog-centered mw-750px">
             <div class="modal-content rounded">
                 <div class="modal-header pb-0 border-0 justify-content-end">
-                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal" onclick="clearErrors()">
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal"
+                        onclick="clearErrors()">
                         <i class="ki-duotone ki-cross fs-1">
                             <span class="path1"></span>
                             <span class="path2"></span>
@@ -181,8 +182,5 @@
         @if (session('error'))
             toastr.error("{{ session('error') }}");
         @endif
-
-      
     </script>
 @endsection
-

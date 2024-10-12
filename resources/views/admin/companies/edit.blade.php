@@ -9,8 +9,8 @@
 @section('content')
     <meta name="companies-data-url" content="{{ route('admin.companies.index') }}">
 
-    <div class="app-content flex-column-fluid">
-        <div id="kt_app_content_container" class="app-container">
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <div id="kt_app_content_container" class="app-container container-xxl">
             <div class="card pt-10">
                 <div class="modal-content rounded">
                     <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
@@ -35,6 +35,18 @@
                                 @enderror
                             </div>
 
+                            <!-- Email Field -->
+                            <div class="d-flex flex-column mb-8 fv-row">
+                                <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                    <span class="required">Email</span>
+                                </label>
+                                <input type="email"
+                                    class="form-control form-control-solid @error('email') is-invalid @enderror"
+                                    placeholder="Enter company email" name="email" value="{{ old('name', $company->email) }}">
+                                @error('email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                             <!-- Address Field -->
                             <div class="d-flex flex-column mb-8 fv-row">
                                 <label class="fs-6 fw-semibold mb-2 required">Address</label>
@@ -102,7 +114,7 @@
         @endif
 
         @if (session('info'))
-            toastr.info("{{ session('info') }}"); 
+            toastr.info("{{ session('info') }}");
         @endif
     </script>
 @endsection

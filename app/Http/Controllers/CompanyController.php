@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
-use Exception; // Import Exception for handling errors
+use Exception;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class CompanyController extends Controller
 {
@@ -16,7 +18,6 @@ class CompanyController extends Controller
                 $query->where('verified', true);
             }]);
 
-            // Search functionality
             if ($request->has('search_name') && !empty($request->input('search_name'))) {
                 $searchName = $request->input('search_name');
                 $query->where('name', 'LIKE', "%{$searchName}%");
@@ -33,6 +34,24 @@ class CompanyController extends Controller
         return view('admin.companies.index');
     }
 
+    /**
+     * Display the specified company along with its verified employees.
+     *
+     * @param  \App\Models\Company  $company
+     * @return \Illuminate\View\View
+     */
+    public function show(Company $company)
+    {
+        // Retrieve the list of verified employees for the company
+        $verifiedEmployees = $company->employees()->where('verified', true)->get();
+
+        // Return the company info along with the list of verified employees
+        return view('admin.companies.show', [
+            'company' => $company,
+            'verifiedEmployees' => $verifiedEmployees,
+        ]);
+    }
+
     public function create()
     {
         return view('admin.companies.create');
@@ -41,11 +60,20 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         try {
-            $validatedData = $this->validateCompany($request);
+            $validator = Validator::make($request->all(), $this->validationRules());
+
+            if ($validator->fails()) {
+                throw new ValidationException($validator);
+            }
+
+            $validatedData = $validator->validated();
             Company::create($validatedData);
+
             return redirect()->route('admin.companies.index')->with('success', 'Company created successfully.');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Failed to create company: ' . $e->getMessage());
+            return back()->withInput()->withErrors(['error' => 'Failed to create company: ' . $e->getMessage()]);
         }
     }
 
@@ -57,7 +85,13 @@ class CompanyController extends Controller
     public function update(Request $request, Company $company)
     {
         try {
-            $validatedData = $this->validateCompany($request, $company->id); // Pass company ID for email validation
+            $validator = Validator::make($request->all(), $this->validationRules($company->id));
+
+            if ($validator->fails()) {
+                throw new ValidationException($validator);
+            }
+
+            $validatedData = $validator->validated();
 
             if ($this->hasChanges($company, $validatedData)) {
                 $company->update($validatedData);
@@ -65,8 +99,10 @@ class CompanyController extends Controller
             }
 
             return redirect()->back()->with('info', 'No changes were made.');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Failed to update company: ' . $e->getMessage());
+            return back()->withInput()->withErrors(['error' => 'Failed to update company: ' . $e->getMessage()]);
         }
     }
 
@@ -84,22 +120,22 @@ class CompanyController extends Controller
         }
     }
 
-    // Private Methods
-    private function validateCompany(Request $request, $companyId = null)
+    private function validationRules($companyId = null)
     {
-        return $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:companies,email,' . $companyId, // Adjusted to use the correct table name
-            'address' => 'required|max:255',
-            'phone' => 'required|numeric',
-            'description' => 'nullable|max:500',
-        ]);
+        return [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:companies,email,' . $companyId,
+            'address' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'description' => 'nullable|string|max:500',
+        ];
     }
 
     private function hasChanges(Company $company, array $validatedData): bool
     {
         return (
             $company->name !== $validatedData['name'] ||
+            $company->email !== $validatedData['email'] ||
             $company->address !== $validatedData['address'] ||
             $company->phone !== $validatedData['phone'] ||
             $company->description !== $validatedData['description']

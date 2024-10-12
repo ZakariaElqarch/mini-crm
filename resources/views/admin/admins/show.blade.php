@@ -5,16 +5,12 @@
 @section('page_title', 'Admins')
 @section('breadcrumb', 'Admins')
 
-@section('action')
-    <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_new_ticket"
-        class="btn btn-primary fw-bold fs-8 fs-lg-base">Create</a>
-@endsection
 
 @section('content')
 
     <div id="kt_app_content" class="app-content flex-column-fluid">
         <div id="kt_app_content_container" class="app-container container-xxl">
-            <div class=" card card-body pt-15">
+            <div class="card card-body pt-15">
                 <!--begin::Summary-->
                 <div class="d-flex flex-center flex-column mb-5">
                     <!--begin::Avatar-->
@@ -61,6 +57,53 @@
                     <!--end::Details item-->
                 </div>
                 <!--end::Details content-->
+            </div>
+
+            <div class="card mt-10">
+                <div class="card-body">
+                    <div class="d-flex flex-stack fs-4 py-3">
+                        <div class="fw-bold">History</div>
+                    </div>
+                    <div class="separator separator-dashed my-3"></div>
+
+                    <div class="tab-content mt-10">
+                        <div id="kt_activity_today" class="card-body p-0 tab-pane fade show active" role="tabpanel"
+                            aria-labelledby="kt_activity_today_tab">
+                            <div class="timeline timeline-border-dashed">
+                                @foreach ($historyLog as $log)
+                                    <div class="timeline-item">
+                                        <div class="timeline-line"></div>
+                                        <div class="timeline-icon">
+                                            <i class="ki-duotone ki-time fs-2">
+                                                <span class="path1"></span>
+                                                <span class="path2"></span>
+                                            </i>
+                                        </div>
+                                        <div class="timeline-content mb-10 mt-n1">
+                                            <div class="pe-3 mb-5">
+                                                <!-- Display the action description -->
+                                                <div class="fs-5 fw-semibold mb-2">{{ $log->description }}</div>
+
+                                                <!-- Display the creation time -->
+                                                <div class="d-flex align-items-center mt-1 fs-6">
+                                                    <div class="text-muted me-2 fs-7">At
+                                                        {{ $log->created_at->format('h:i A') }} on
+                                                        {{ $log->created_at->format('M d, Y') }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                                @if ($historyLog->isEmpty())
+                                    <div class="text-center">
+                                        <p class="text-muted">No history logs found.</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

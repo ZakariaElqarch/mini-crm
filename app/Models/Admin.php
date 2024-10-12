@@ -18,4 +18,9 @@ class Admin extends Authenticatable
     {
         $this->attributes['password'] = bcrypt($password);
     }
+
+    public function historyLog()
+    {
+        return $this->hasMany(HistoryLog::class); // Adjust this to your actual HistoryLog model
+    }
 }

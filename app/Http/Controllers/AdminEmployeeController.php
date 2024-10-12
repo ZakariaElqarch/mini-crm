@@ -3,40 +3,35 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Str;
-use App\Mail\EmployeeInviteMail;
 use App\Models\Company;
 use App\Models\Employee;
 use App\Models\HistoryLog;
 use App\Models\Invitation;
+use App\Mail\EmployeeInviteMail;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
+use Exception;
 
 class AdminEmployeeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-
     public function index(Request $request)
     {
-        // Fetch all companies to pass to the view
         $companies = Company::all(); // Fetch all companies
 
         if ($request->ajax()) {
-            $query = Employee::with(['company', 'invitation'])->select('employees.*'); // Include company and invitation data
+            $query = Employee::with(['company', 'invitation'])->select('employees.*');
 
-            // Search functionality
             if ($request->has('search_name') && !empty($request->input('search_name'))) {
                 $searchTerm = $request->input('search_name');
-                $query->where(function ($query) use ($searchTerm) {
-                    $query->where('fullName', 'LIKE', "%{$searchTerm}%");
-                });
+                $query->where('fullName', 'LIKE', "%{$searchTerm}%");
             }
 
             return DataTables::of($query)
@@ -59,143 +54,116 @@ class AdminEmployeeController extends Controller
                 ->make(true);
         }
 
-        return view('admin.employee.index', compact('companies')); // Pass companies to the view
+        return view('admin.employee.index', compact('companies'));
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show(Employee $employee)
     {
-        //
+        // Load the company relationship for the employee
+        $company = $employee->company; // Access the company relationship directly
+
+        // Return the employee info along with the associated company
+        return view('admin.employee.show', [
+            'employee' => $employee,
+            'company' => $company, // Pass the company info
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
-        // Validate the input
-        $validatedData = $request->validate([
-            'email' => 'required|email|unique:employees,email', // Ensure uniqueness in employees
-            'fullName' => 'required|string|max:255',
-            'company_id' => 'required|exists:companies,id',
-        ]);
+        try {
+            $validator = Validator::make($request->all(), $this->validationRules());
 
-        DB::transaction(function () use ($validatedData) {
-            // Create the employee
-            $employee = Employee::create([
-                'email' => $validatedData['email'],
-                'fullName' => $validatedData['fullName'],
-                'company_id' => $validatedData['company_id'],
-            ]);
-
-            // Retrieve the company and admin
-            $company = Company::find($validatedData['company_id']);
-            $admin = auth()->user(); // Get the currently authenticated admin
-
-            if (!$company || !$admin) {
-                // Handle the error, either return a response or throw an exception
-                throw new \Exception('Company or Admin not found');
+            if ($validator->fails()) {
+                throw new ValidationException($validator);
             }
 
-            // Create the invitation
-            $invitation = Invitation::create([
-                'admin_id' => $admin->id,
-                'employee_id' => $employee->id,
-                'token' => Str::random(40),
-                'status' => 'sent',
-            ]);
+            $validatedData = $validator->validated();
 
-            try {
-                // Pass the company and admin information to the mail
+            DB::transaction(function () use ($validatedData) {
+                $employee = Employee::create([
+                    'email' => $validatedData['email'],
+                    'fullName' => $validatedData['fullName'],
+                    'company_id' => $validatedData['company_id'],
+                ]);
+
+                $company = Company::find($validatedData['company_id']);
+                $admin = auth()->user();
+
+                if (!$company || !$admin) {
+                    throw new Exception('Company or Admin not found');
+                }
+
+                $invitation = Invitation::create([
+                    'admin_id' => $admin->id,
+                    'employee_id' => $employee->id,
+                    'token' => Str::random(40),
+                    'status' => 'sent',
+                ]);
+
                 Mail::to($employee->email)->send(new EmployeeInviteMail($invitation, $company, $admin));
-            } catch (\Exception $e) {
-                Log::error('Failed to send invitation email: ' . $e->getMessage());
-                throw $e; // Throw the exception to rollback
-            }
 
-            // Log the action in history
-            HistoryLog::create([
-                'admin_id' => $admin->id,
-                'employee_id' => $employee->id,
-                'action' => 'send_invitation',
-                'description' => 'Admin "' . $admin->fullName . '" invited employee "' . $validatedData['fullName'] . '" with email "' . $validatedData['email'] . '".'
-            ]);
-        });
+                HistoryLog::create([
+                    'admin_id' => $admin->id,
+                    'employee_id' => $employee->id,
+                    'action' => 'send_invitation',
+                    'description' => 'Admin "' . $admin->fullName . '" invited employee "' . $validatedData['fullName'] . '" with email "' . $validatedData['email'] . '".'
+                ]);
+            });
 
-        return redirect()->back()->with('success', 'Invitation sent successfully.');
+            return redirect()->back()->with('success', 'Invitation sent successfully.');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
+        } catch (Exception $e) {
+            return back()->withInput()->withErrors(['error' => 'Failed to send invitation: ' . $e->getMessage()]);
+        }
     }
 
-
-
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        // Find the employee
-        $employee = Employee::find($id);
+        try {
+            $employee = Employee::find($id);
 
-        if (!$employee) {
-            return redirect()->back()->with('error', 'Employee not found.');
+            if (!$employee) {
+                return redirect()->back()->with('error', 'Employee not found.');
+            }
+
+            Invitation::where('employee_id', $id)->delete();
+            $employee->delete();
+
+            return redirect()->back()->with('success', 'Employee deleted successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Failed to delete employee: ' . $e->getMessage());
         }
-
-        // Delete the associated invitation
-        Invitation::where('employee_id', $id)->delete();
-
-        // Delete the employee
-        $employee->delete();
-
-        return redirect()->back()->with('success', 'Employee deleted successfully.');
     }
 
-    /**
-     * Cancel the specified invitation.
-     */
     public function cancelInvitation($id)
     {
-        // Find the invitation
-        $invitation = Invitation::find($id);
+        try {
+            $invitation = Invitation::find($id);
 
-        if (!$invitation || $invitation->status !== 'sent') {
-            return redirect()->back()->with('error', 'Invitation cannot be canceled.');
+            if (!$invitation || $invitation->status !== 'sent') {
+                return redirect()->back()->with('error', 'Invitation cannot be canceled.');
+            }
+
+            $invitation->status = 'canceled';
+            $invitation->save();
+
+            return redirect()->back()->with('success', 'Invitation canceled successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Failed to cancel invitation: ' . $e->getMessage());
         }
-
-        // Update the invitation status to canceled
-        $invitation->status = 'canceled';
-        $invitation->save();
-
-        return redirect()->back()->with('success', 'Invitation canceled successfully.');
     }
 
+    private function validationRules(): array
+    {
+        return [
+            'email' => 'required|email|unique:employees,email',
+            'fullName' => 'required|string|max:255',
+            'company_id' => 'required|exists:companies,id',
+        ];
+    }
 
     private function getActionButtons($row): string
     {
@@ -212,7 +180,6 @@ class AdminEmployeeController extends Controller
                 </form>
             </div>';
 
-        // Add cancel invitation option if an invitation exists and is sent
         if ($row->invitation && $row->invitation->status === 'sent') {
             $buttons .= '
             <div class="menu-item px-3">
@@ -223,7 +190,7 @@ class AdminEmployeeController extends Controller
             </div>';
         }
 
-        $buttons .= '</div>'; // Close the menu div
+        $buttons .= '</div>';
         return $buttons;
     }
 }

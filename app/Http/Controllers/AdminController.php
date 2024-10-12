@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
-use Exception; 
+use Exception;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -16,7 +18,6 @@ class AdminController extends Controller
         if ($request->ajax()) {
             $query = Admin::query();
 
-            // Search functionality
             if ($request->has('search') && !empty($request->input('search')['value'])) {
                 $searchTerm = $request->input('search')['value'];
                 $query->where(function ($query) use ($searchTerm) {
@@ -38,42 +39,60 @@ class AdminController extends Controller
 
     public function create()
     {
-        return view('admin.admins.create'); // Adjust the path according to your views
+        return view('admin.admins.create');
     }
 
     public function store(Request $request)
     {
         try {
-            $validatedData = $this->validateAdmin($request);
+            $validator = Validator::make($request->all(), $this->validationRules());
+
+            if ($validator->fails()) {
+                throw new ValidationException($validator);
+            }
+
+            $validatedData = $validator->validated();
+            $validatedData['password'] = Hash::make($validatedData['password']);
 
             Admin::create($validatedData);
 
             return redirect()->route('admins.index')->with('success', 'Admin created successfully.');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (Exception $e) {
-            // Log the exception or show a generic error message
-            return redirect()->back()->with('error', 'Failed to create admin: ' . $e->getMessage());
+            return back()->withInput()->withErrors(['error' => 'Failed to create admin: ' . $e->getMessage()]);
         }
     }
 
     public function show(Admin $admin)
     {
         try {
-            return view('admin.admins.show', compact('admin')); // Adjust the path according to your views
+            $historyLog = $admin->historyLog()->latest()->get();
+            return view('admin.admins.show', compact('admin', 'historyLog'));
         } catch (Exception $e) {
-            // Handle other exceptions
-            return redirect()->route('admins.index')->with('error', 'Failed to retrieve admin details: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Failed to retrieve admin details: ' . $e->getMessage()]);
         }
     }
 
     public function edit(Admin $admin)
     {
-        return view('admin.admins.edit', compact('admin')); // Adjust the path according to your views
+        return view('admin.admins.edit', compact('admin'));
     }
 
     public function update(Request $request, Admin $admin)
     {
         try {
-            $validatedData = $this->validateAdmin($request);
+            $validator = Validator::make($request->all(), $this->validationRules($admin->id));
+
+            if ($validator->fails()) {
+                throw new ValidationException($validator);
+            }
+
+            $validatedData = $validator->validated();
+
+            if (isset($validatedData['password'])) {
+                $validatedData['password'] = Hash::make($validatedData['password']);
+            }
 
             if ($this->hasChanges($admin, $validatedData)) {
                 $admin->update($validatedData);
@@ -81,21 +100,20 @@ class AdminController extends Controller
             }
 
             return redirect()->back()->with('info', 'No changes were made.');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->errors())->withInput();
         } catch (Exception $e) {
-            // Handle any exceptions that may occur
-            return redirect()->back()->with('error', 'Failed to update admin: ' . $e->getMessage());
+            return back()->withInput()->withErrors(['error' => 'Failed to update admin: ' . $e->getMessage()]);
         }
     }
 
     public function destroy(Admin $admin)
     {
         try {
-            // Check if trying to delete the currently logged-in admin
             if ($admin->id === Auth::id()) {
                 throw new Exception('You cannot delete your own account.');
             }
 
-            // Check if this is the last admin account
             if (Admin::count() <= 1) {
                 throw new Exception('Cannot delete the last admin account.');
             }
@@ -103,30 +121,29 @@ class AdminController extends Controller
             $admin->delete();
             return redirect()->route('admins.index')->with('success', 'Admin deleted successfully.');
         } catch (Exception $e) {
-            // Catch any exception and display an error message
             return redirect()->route('admins.index')->with('error', $e->getMessage());
         }
     }
 
-    // Private Methods
-    private function validateAdmin(Request $request)
+    private function validationRules($adminId = null)
     {
-        return $request->validate([
-            'email' => 'required|email|unique:admins,email,' . ($request->admin ? $request->admin->id : 'NULL'),
-            'password' => 'required|min:8',
+        return [
+            'email' => 'required|email|unique:admins,email,' . $adminId,
+            'password' => $adminId ? 'nullable|min:8' : 'required|min:8',
             'fullName' => 'required|string|max:255',
             'birthDate' => 'required|date|before:today',
             'phone' => 'nullable|string|max:15',
-        ]);
+        ];
     }
 
     private function hasChanges(Admin $admin, array $validatedData): bool
     {
         return (
             $admin->fullName !== $validatedData['fullName'] ||
+            $admin->email !== $validatedData['email'] ||
             $admin->birthDate !== $validatedData['birthDate'] ||
             $admin->phone !== $validatedData['phone'] ||
-            ($validatedData['password'] && !Hash::check($validatedData['password'], $admin->password))
+            (isset($validatedData['password']) && !Hash::check($validatedData['password'], $admin->password))
         );
     }
 
@@ -150,6 +167,9 @@ class AdminController extends Controller
     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
         <div class="menu-item px-3">
             <a href="' . route('admins.show', $row->id) . '" class="btn btn-link btn-color-muted btn-active-color-primary me-5 mb-2 mx-5">View</a>
+        </div>
+        <div class="menu-item px-3">
+            <a href="' . route('admins.edit', $row->id) . '" class="btn btn-link btn-color-muted btn-active-color-primary me-5 mb-2 mx-5">Edit</a>
         </div>
         ' . $deleteButton . '
     </div>';
