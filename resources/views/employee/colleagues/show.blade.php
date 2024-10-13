@@ -1,10 +1,10 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Company')
+@section('title', 'Colleague')
 
-@section('page_title', 'Company')
+@section('page_title', 'Colleague')
 
-@section('breadcrumb', 'Detail Company')
+@section('breadcrumb', 'Detail Colleague')
 
 @section('content')
 
@@ -62,7 +62,7 @@
             <div class="card card-body pt-8 mt-15">
                 <!--begin::Details toggle-->
                 <div class="d-flex flex-stack fs-4 py-3">
-                    <div class="fw-bold">Comppany</div>
+                    <div class="fw-bold">Company</div>
                 </div>
                 <!--end::Details toggle-->
                 <div class="separator separator-dashed my-3"></div>

@@ -2,14 +2,14 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminEmployeeController;
-use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdminCompanyController;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\ColleaguesController;
+use App\Http\Controllers\AdminHistoryLogController;
 use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\HistoryLogController;
+use App\Http\Controllers\EmployeeDashboardController;
 use App\Http\Controllers\InvitationController;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,7 +32,7 @@ Route::get('/', function () {
 Route::middleware('auth:admin')->group(function () {
 
     // Admin Dashboard
-    Route::get('/admin/dashboard', [DashboardController::class, 'showDashboard'])->name('admin.dashboard');
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'showDashboard'])->name('admin.dashboard');
 
     // Profile Management for Admins
     Route::prefix('admin/profile')->name('admin.profile.')->group(function () {
@@ -42,7 +42,7 @@ Route::middleware('auth:admin')->group(function () {
     });
 
     // Company Management Routes
-    Route::resource('admin/companies', CompanyController::class)->names('admin.companies');
+    Route::resource('admin/companies', AdminCompanyController::class)->names('admin.companies');
 
     // Admin Management Routes
     Route::resource('admin/admins', AdminController::class);
@@ -51,13 +51,24 @@ Route::middleware('auth:admin')->group(function () {
     Route::resource('admin/employee', AdminEmployeeController::class);
     Route::post('/admin/invitations/{id}/cancel', [AdminEmployeeController::class, 'cancelInvitation'])->name('admin.invitations.cancel');
 
-    Route::resource('admin/history', HistoryLogController::class);
-
+    Route::resource('admin/history', AdminHistoryLogController::class);
 });
 
 Route::get('/invite/validate/{token}', [InvitationController::class, 'validateInvitation'])->name('invite.validate');
 Route::post('/invite/complete/{token}', [InvitationController::class, 'completeProfile'])->name('invite.complete');
 
+Route::middleware('auth:employee')->group(function () {
+
+    // Employee Dashboard
+    Route::get('/employee/dashboard', [EmployeeDashboardController::class, 'showDashboard'])->name('employee.dashboard');
+
+    // Route for displaying the list of colleagues (index)
+    Route::get('employee/colleagues', [ColleaguesController::class, 'index'])->name('employee.colleagues.index');
+
+    // Route for displaying a specific colleague's details (show)
+    Route::get('employee/colleagues/{id}', [ColleaguesController::class, 'show'])->name('employee.colleagues.show');
+    Route::get('employee/Company/', [CompanyController::class, 'show'])->name('employee.Company.show');
+});
 
 // Include the authentication routes for admin
 require __DIR__ . '/auth.php';

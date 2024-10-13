@@ -1,5 +1,5 @@
 <!-- resources/views/dashboard.blade.php -->
-@extends('layouts.admin')
+@extends('layouts.dashboard')
 
 @section('title', 'Employees')
 @section('page_title', 'Employees')

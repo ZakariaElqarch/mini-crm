@@ -1,8 +1,8 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Company')
+@section('title', 'My Company')
 
-@section('page_title', 'Company')
+@section('page_title', 'My Company')
 
 @section('breadcrumb', 'Detail Company')
 

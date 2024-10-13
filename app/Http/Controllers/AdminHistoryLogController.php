@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\HistoryLog;
 use Illuminate\Http\Request;
 
-class HistoryLogController extends Controller
+class AdminHistoryLogController extends Controller
 {
     /**
      * Display a listing of the resource.
