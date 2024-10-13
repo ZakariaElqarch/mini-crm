@@ -17,6 +17,12 @@ class EmployeeAuthController extends Controller
 
     public function login(Request $request)
     {
+        // Invalidate the current session
+        $request->session()->invalidate();
+
+        // Regenerate the CSRF token
+        $request->session()->regenerateToken();
+        
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',

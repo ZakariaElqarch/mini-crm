@@ -5,38 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeDashboardController extends Controller
 {
     public function showDashboard()
     {
-        // Get total count of verified employees across all companies
-        $totalVerifiedEmployees = Employee::where('verified', true)->count();
+        // Get the authenticated employee
+        $employee = Auth::user(); // Assuming the employee is authenticated and is an instance of the Employee model
 
-        // Get total count of unverified employees across all companies
-        $totalUnVerifiedEmployees = Employee::where('verified', false)->count();
+        // Get the employee's company
+        $company = $employee->company;
 
-      
-        // Get total count of companies
-        $totalCompanies = Company::count();
-
-       
-
-        // Get employee count per company using model relationships
-        $employeeCountsByCompany = Company::withCount(['employees as verified_count' => function ($query) {
-            $query->where('verified', true);  // Count only verified employees
-        }])->get();
-
-        // Prepare data for the chart
-        $labels = [];
-        $dataCounts = [];
-
-        foreach ($employeeCountsByCompany as $company) {
-            $labels[] = $company->name;  // Assuming the Company model has a 'name' attribute
-            $dataCounts[] = $company->verified_count;  // Accessing the verified employee count
-        }
+        // Count all verified employees in that company
+        $verifiedEmployeeCount = $company ? $company->employees()->where('verified', true)->count() : 0;
 
         return view('employee.dashboard', [
+            'company' => $company ,
+            'verifiedEmployeeCount' => $verifiedEmployeeCount,
         ]);
     }
 }

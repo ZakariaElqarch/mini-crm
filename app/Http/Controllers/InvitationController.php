@@ -19,7 +19,7 @@ class InvitationController extends Controller
         $invitation = Invitation::where('token', $token)->first();
 
         // Handle invalid or already validated/canceled invitations
-        if (!$invitation || in_array($invitation->status, ['validated', 'canceled'])) {
+        if (!$invitation || in_array($invitation->status, ['completed', 'canceled'])) {
             abort(404);
         }
 
@@ -54,7 +54,7 @@ class InvitationController extends Controller
         $validatedData = $request->validate([
             'address' => 'required|string|max:255',
             'phoneNumber' => 'required|string|max:20',
-            'date_of_birth' => 'required|date',
+            'date_of_birth' => 'required|date|before:today',
             'password' => 'required|string|min:8|confirmed', // Confirm password input
         ]);
 

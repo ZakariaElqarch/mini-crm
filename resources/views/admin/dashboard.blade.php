@@ -13,7 +13,7 @@
                 <!--begin::Col-->
                 <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
                     <!-- Card for Welcome Message -->
-                    <a class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-50 mb-5 mb-xl-10 hover-elevate-up"
+                    <a href="{{ route('admin.profile.show') }}" class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-50 mb-5 mb-xl-10 hover-elevate-up"
                         style="background-color: #F1416C; background-image:url('{{ asset('assets/media/patterns/vector-1.png') }}')">
                         <div class="card-header pt-5">
                             <div class="card-title d-flex flex-column">

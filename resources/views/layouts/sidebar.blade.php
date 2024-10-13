@@ -2,12 +2,21 @@
     data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="225px"
     data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_sidebar_mobile_toggle">
     <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
-        <a href="{{ route('admin.dashboard') }}">
-            <img alt="Logo" src="{{ asset('assets/media/logos/logo-illizeo.png') }}"
-                class="h-25px app-sidebar-logo-default">
-            <img alt="Logo" src="{{ asset('assets/media/logos/favicon-illizeo.png') }}"
-                class="h-20px app-sidebar-logo-minimize">
-        </a>
+        @if (Auth::guard('admin')->check())
+            <a href="{{ route('admin.dashboard') }}">
+                <img alt="Logo" src="{{ asset('assets/media/logos/logo-illizeo.png') }}"
+                    class="h-25px app-sidebar-logo-default">
+                <img alt="Logo" src="{{ asset('assets/media/logos/favicon-illizeo.png') }}"
+                    class="h-20px app-sidebar-logo-minimize">
+            </a>
+        @elseif(Auth::guard('employee')->check())
+            <a href="{{ route('employee.dashboard') }}">
+                <img alt="Logo" src="{{ asset('assets/media/logos/logo-illizeo.png') }}"
+                    class="h-25px app-sidebar-logo-default">
+                <img alt="Logo" src="{{ asset('assets/media/logos/favicon-illizeo.png') }}"
+                    class="h-20px app-sidebar-logo-minimize">
+            </a>
+        @endif
         <div id="kt_app_sidebar_toggle"
             class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary h-30px w-30px position-absolute top-50 start-100 translate-middle rotate"
             data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body"
@@ -66,7 +75,7 @@
                                 <span class="menu-title">Companies</span>
                             </a>
                         </div>
-                        @elseif(Auth::guard('employee')->check())
+                    @elseif(Auth::guard('employee')->check())
                         <div class="menu-item">
                             <a class="menu-link {{ request()->routeIs('employee.Company.show') ? 'active' : '' }}"
                                 href="{{ route('employee.Company.show') }}">
@@ -81,7 +90,6 @@
                                 <span class="menu-title">Companies</span>
                             </a>
                         </div>
-                        
                     @endif
 
 

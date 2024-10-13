@@ -12,11 +12,16 @@ class AdminAuthController extends Controller
 {
     public function showLoginForm()
     {
-        return view('auth.admin_login'); 
+        return view('auth.admin_login');
     }
 
     public function login(Request $request)
     {
+        // Invalidate the current session
+        $request->session()->invalidate();
+
+        // Regenerate the CSRF token
+        $request->session()->regenerateToken();
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',

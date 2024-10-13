@@ -14,10 +14,13 @@ class AdminCompanyController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+
+            // Get companies with count of there active employees
             $query = Company::withCount(['employees' => function ($query) {
                 $query->where('verified', true);
             }]);
 
+            //search by name
             if ($request->has('search_name') && !empty($request->input('search_name'))) {
                 $searchName = $request->input('search_name');
                 $query->where('name', 'LIKE', "%{$searchName}%");
@@ -60,6 +63,7 @@ class AdminCompanyController extends Controller
     public function store(Request $request)
     {
         try {
+            // Validate the inputs
             $validator = Validator::make($request->all(), $this->validationRules());
 
             if ($validator->fails()) {
