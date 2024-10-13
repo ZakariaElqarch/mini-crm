@@ -41,8 +41,10 @@ class EmployeeAuthController extends Controller
     {
         Auth::guard('employee')->logout();
 
+        // Invalidate the current session
         $request->session()->invalidate();
 
+        // Regenerate the CSRF token
         $request->session()->regenerateToken();
 
         return redirect()->route('employee.login')->with('success', 'You have been successfully logged out.');
