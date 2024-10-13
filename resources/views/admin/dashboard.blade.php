@@ -13,7 +13,7 @@
                 <!--begin::Col-->
                 <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
                     <!-- Card for Welcome Message -->
-                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-50 mb-5 mb-xl-10 hover-elevate-up"
+                    <a class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-50 mb-5 mb-xl-10 hover-elevate-up"
                         style="background-color: #F1416C; background-image:url('{{ asset('assets/media/patterns/vector-1.png') }}')">
                         <div class="card-header pt-5">
                             <div class="card-title d-flex flex-column">
@@ -22,10 +22,10 @@
                                     {{ Auth::user()->fullName }}</span>
                             </div>
                         </div>
-                    </div>
+                    </a>
 
                     <!-- Card for Employees -->
-                    <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-center border-0 h-md-50 mb-5 mb-xl-10 hover-elevate-up  bg-primary "
+                    <a href="{{ route('employee.index') }}" class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-center border-0 h-md-50 mb-5 mb-xl-10 hover-elevate-up  bg-primary "
                         >
                         <div class="card-header pt-5">
                             <div class="card-title d-flex flex-column">
@@ -58,14 +58,14 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <!--end::Col-->
 
                 <!--begin::Col for Companies and Admins-->
                 <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
                     <!-- Card for Companies -->
-                    <div class="card card-flush h-md-50 mb-5 mb-xl-10 hover-elevate-up" style="background: linear-gradient(112.14deg, #00D2FF 0%, #3A7BD5 100%)">
+                    <a href="{{ route('admin.companies.index') }}" class="card card-flush h-md-50 mb-5 mb-xl-10 hover-elevate-up" style="background: linear-gradient(112.14deg, #00D2FF 0%, #3A7BD5 100%)">
                         <div class="card-header pt-5">
                             <div class="card-title d-flex flex-column">
                                 <span class="fs-2hx fw-bold text-white">{{ $totalCompanies }}</span>
@@ -75,10 +75,10 @@
                         <div class="card-body d-flex align-items-end pt-0">
                             <p class="text-white">Total number of companies in the system.</p>
                         </div>
-                    </div>
+                    </a>
 
                     <!-- Card for Admins -->
-                    <div class="card card-flush h-lg-50 hover-elevate-up" style="background-color: #1C325E">
+                    <a href="{{ route('admins.index') }}" class="card card-flush h-lg-50 hover-elevate-up" style="background-color: #1C325E">
                         <div class="card-header pt-5">
                             <div class="card-title d-flex flex-column">
                                 <span class="fs-2hx fw-bold text-white">{{ $totalAdmins }}</span>
@@ -88,7 +88,7 @@
                         <div class="card-body d-flex align-items-end pt-0">
                             <p class="text-white">Total number of admins managing the system.</p>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <!--end::Col-->
 

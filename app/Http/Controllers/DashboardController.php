@@ -28,7 +28,7 @@ class DashboardController extends Controller
         // Get the latest history logs with associated admin and employee data
         $historyLogs = HistoryLog::with(['admin', 'employee'])
             ->orderBy('created_at', 'desc')
-            ->take(5)
+            ->take(3)
             ->get();
 
         // Get employee count per company using model relationships
