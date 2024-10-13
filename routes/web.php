@@ -7,8 +7,10 @@ use App\Http\Controllers\AdminCompanyController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\ColleaguesController;
 use App\Http\Controllers\AdminHistoryLogController;
+use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EmployeeDashboardController;
+use App\Http\Controllers\EmployeeProfileController;
 use App\Http\Controllers\InvitationController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +54,10 @@ Route::middleware('auth:admin')->group(function () {
     Route::post('/admin/invitations/{id}/cancel', [AdminEmployeeController::class, 'cancelInvitation'])->name('admin.invitations.cancel');
 
     Route::resource('admin/history', AdminHistoryLogController::class);
+
+    Route::get('admin/profile/', [AdminProfileController::class, 'show'])->name('admin.profile.show');
+    Route::get('admin/profile/edit', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::put('admin/profile/update', [AdminProfileController::class, 'update'])->name('admin.profile.update');
 });
 
 Route::get('/invite/validate/{token}', [InvitationController::class, 'validateInvitation'])->name('invite.validate');
@@ -68,6 +74,11 @@ Route::middleware('auth:employee')->group(function () {
     // Route for displaying a specific colleague's details (show)
     Route::get('employee/colleagues/{id}', [ColleaguesController::class, 'show'])->name('employee.colleagues.show');
     Route::get('employee/Company/', [CompanyController::class, 'show'])->name('employee.Company.show');
+
+    Route::get('employee/profile/', [EmployeeProfileController::class, 'show'])->name('employee.profile.show');
+    Route::get('employee/profile/edit', [EmployeeProfileController::class, 'edit'])->name('employee.profile.edit');
+    Route::put('employee/profile/update', [EmployeeProfileController::class, 'update'])->name('employee.profile.update');
+
 });
 
 // Include the authentication routes for admin

@@ -38,7 +38,11 @@
 
         <!-- Menu item -->
         <div class="menu-item px-5">
-            <a href="" class="menu-link px-5">My Profile</a>
+            @if (Auth::guard('admin')->check())
+                <a href="{{ route('admin.profile.show') }}" class="menu-link px-5">My Profile</a>
+            @elseif (Auth::guard('employee')->check())
+                <a href="{{ route('employee.profile.show') }}" class="menu-link px-5">My Profile</a>
+            @endif
         </div>
 
 
@@ -55,9 +59,16 @@
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 Sign Out
             </a>
-            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
+            @if (Auth::guard('admin')->check())
+                <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+            @elseif (Auth::guard('employee')->check())
+                <form id="logout-form" action="{{ route('employee.logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+            @endif
+
         </div>
 
     </div>

@@ -34,6 +34,11 @@ class EmployeeAuthController extends Controller
     public function logout(Request $request)
     {
         Auth::guard('employee')->logout();
-        return redirect()->route('employee.login'); // Redirect to employee login
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect()->route('employee.login')->with('success', 'You have been successfully logged out.');
     }
 }
