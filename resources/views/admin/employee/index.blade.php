@@ -159,5 +159,9 @@
         @if (session('error'))
             toastr.error("{{ session('error') }}");
         @endif
+
+        @if ($errors->has('error'))
+            toastr.error("{{ $errors->first('error') }}");
+        @endif
     </script>
 @endsection

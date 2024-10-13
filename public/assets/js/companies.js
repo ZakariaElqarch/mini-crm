@@ -74,5 +74,6 @@ $(document).ready(() => {
     // Clear errors when modal is closed
     $('#kt_modal_new_comapny').on('hidden.bs.modal', function () {
         clearErrors();
+        location.reload();
     });
 });

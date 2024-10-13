@@ -87,7 +87,7 @@
                                         <span class="path4"></span>
                                     </i>
                                 </span>
-                                <span class="menu-title">Companies</span>
+                                <span class="menu-title">My Company</span>
                             </a>
                         </div>
                     @endif
