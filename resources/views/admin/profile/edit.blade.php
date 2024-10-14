@@ -19,7 +19,7 @@
                             @method('PUT')
 
                             <div class="mb-4">
-                                <h4 class="fw-bold">Employee Profile</h4>
+                                <h4 class="fw-bold">Admin Profile</h4>
                             </div>
 
                             <!-- Avatar -->

@@ -1,78 +1,74 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Edit Company')
+@section('title', 'Edit Admin')
 
-@section('page_title', 'Edit Company')
+@section('page_title', 'Edit Admin')
 
-@section('breadcrumb', 'Edit Company')
+@section('breadcrumb', 'Edit Admin')
 
 @section('content')
-    <meta name="companies-data-url" content="{{ route('admin.companies.index') }}">
 
-    <div class="app-content flex-column-fluid">
-        <div id="kt_app_content_container" class="app-container">
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <div id="kt_app_content_container" class="app-container container-xxl">
             <div class="card pt-10">
                 <div class="modal-content rounded">
                     <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
-                        <form id="kt_modal_edit_ticket_form" class="form fv-plugins-bootstrap5 fv-plugins-framework"
-                            action="{{ route('admin.companies.update', $company) }}" method="POST">
+                        <form id="kt_modal_edit_employee_form" class="form fv-plugins-bootstrap5 fv-plugins-framework"
+                            action="{{ route('admins.update',$admin) }}" method="POST">
                             @csrf
-                            @method('PUT') <!-- Use PUT method for updating -->
+                            @method('PUT')
 
-                            <div class="mb-4">
-                                <h4 class="fw-bold">Edit Company Details</h4>
-                            </div>
-
-                            <!-- Name Field -->
+                            <!-- Full Name Field -->
                             <div class="d-flex flex-column mb-8 fv-row">
-                                <label class="fs-6 fw-semibold mb-2 required">Name</label>
+                                <label class="fs-6 fw-semibold mb-2 required">Full Name</label>
                                 <input type="text"
-                                    class="form-control form-control-solid @error('name') is-invalid @enderror"
-                                    placeholder="Enter the company name" name="name"
-                                    value="{{ old('name', $company->name) }}">
-                                @error('name')
+                                    class="form-control form-control-solid @error('fullName') is-invalid @enderror"
+                                    placeholder="Enter your full name" name="fullName"
+                                    value="{{ old('fullName', $admin->fullName) }}">
+                                @error('fullName')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
-                            <!-- Address Field -->
+                            <!-- Email Field -->
                             <div class="d-flex flex-column mb-8 fv-row">
-                                <label class="fs-6 fw-semibold mb-2 required">Address</label>
-                                <input type="text"
-                                    class="form-control form-control-solid @error('address') is-invalid @enderror"
-                                    placeholder="Enter the company address" name="address"
-                                    value="{{ old('address', $company->address) }}">
-                                @error('address')
+                                <label class="fs-6 fw-semibold mb-2 required">Email</label>
+                                <input type="email"
+                                    class="form-control form-control-solid @error('email') is-invalid @enderror"
+                                    placeholder="Enter your email" name="email"
+                                    value="{{ old('email', $admin->email) }}">
+                                @error('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <!-- Phone Field -->
                             <div class="d-flex flex-column mb-8 fv-row">
-                                <label class="fs-6 fw-semibold mb-2 required">Phone</label>
+                                <label class="fs-6 fw-semibold mb-2">Phone</label>
                                 <input type="text"
                                     class="form-control form-control-solid @error('phone') is-invalid @enderror"
-                                    placeholder="00 111 222 333 444" name="phone"
-                                    value="{{ old('phone', $company->phone) }}">
+                                    placeholder="Enter your phone number" name="phone"
+                                    value="{{ old('phone', $admin->phone) }}">
                                 @error('phone')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
-                            <!-- Description Field -->
+                            <!-- Birth Date Field -->
                             <div class="d-flex flex-column mb-8 fv-row">
-                                <label class="fs-6 fw-semibold mb-2">Description</label>
-                                <textarea class="form-control form-control-solid @error('description') is-invalid @enderror" rows="4"
-                                    name="description" placeholder="Type your company description">{{ old('description', $company->description) }}</textarea>
-                                @error('description')
+                                <label class="fs-6 fw-semibold mb-2">Birth Date</label>
+                                <input type="date"
+                                    class="form-control form-control-solid @error('birthDate') is-invalid @enderror"
+                                    name="birthDate" value="{{ old('birthDate', $admin->birthDate) }}">
+                                @error('birthDate')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <!-- Actions -->
                             <div class="text-end">
-                                <button type="submit" id="kt_modal_edit_ticket_submit" class="btn btn-primary">
-                                    <span class="indicator-label">Update</span>
+                                <button type="submit" id="kt_modal_edit_employee_submit" class="btn btn-primary">
+                                    <span class="indicator-label">Update Profile</span>
                                     <span class="indicator-progress">Please wait...
                                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                     </span>
