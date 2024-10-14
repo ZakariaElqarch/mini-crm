@@ -19,23 +19,38 @@ class EmployeeAuthController extends Controller
     {
         // Invalidate the current session
         $request->session()->invalidate();
-
+    
         // Regenerate the CSRF token
         $request->session()->regenerateToken();
-        
+    
+        // Validate the request data
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
-
-        if (!Auth::guard('employee')->attempt($request->only('email', 'password'))) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+    
+        // Find the employee by email
+        $employee = Employee::where('email', $request->email)->first();
+    
+        // Check if the employee exists and if they are verified
+        if ($employee && !$employee->verified) {
+            return back()->withErrors([
+                'email' => ['Your account is not verified. Please check your email for verification.'],
+            ])->withInput();  // Add withInput() to return old input values
         }
-
-        return redirect()->route('employee.dashboard'); // Redirect to employee dashboard
+    
+        // Attempt to log in the employee
+        if (!Auth::guard('employee')->attempt($request->only('email', 'password'))) {
+            return back()->withErrors([
+                'email' => ['The provided credentials are incorrect.'],
+            ])->withInput();  // Add withInput() to return old input values
+        }
+    
+        // Redirect to employee dashboard if successful
+        return redirect()->route('employee.dashboard');
     }
+    
+
 
     public function logout(Request $request)
     {

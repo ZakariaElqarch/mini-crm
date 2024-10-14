@@ -143,7 +143,7 @@ class AdminEmployeeController extends Controller
         try {
             $invitation = Invitation::find($id);
 
-            if (!$invitation || $invitation->status !== 'sent') {
+            if (!$invitation || $invitation->status === 'completed') {
                 return redirect()->back()->with('error', 'Invitation cannot be canceled.');
             }
 
@@ -180,7 +180,7 @@ class AdminEmployeeController extends Controller
                 </form>
             </div>';
 
-        if ($row->invitation && $row->invitation->status === 'sent') {
+        if ($row->invitation && ($row->invitation->status === 'sent' ||  $row->invitation->status == 'validated')) {
             $buttons .= '
             <div class="menu-item px-3">
                 <form action="' . route('admin.invitations.cancel', $row->invitation->id) . '" method="POST" style="display:inline;">

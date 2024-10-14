@@ -30,7 +30,7 @@
                     <!--begin::Input group for Address-->
                     <div class="fv-row mb-8">
                         <input type="text" placeholder="Address" name="address" required autocomplete="off"
-                            class="form-control bg-transparent {{ $errors->has('address') ? 'is-invalid' : '' }}" />
+                            class="form-control bg-transparent {{ $errors->has('address') ? 'is-invalid' : '' }}" value="{{ old('address') }}"/>
                         @if ($errors->has('address'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('address') }}
@@ -42,7 +42,7 @@
                     <!--begin::Input group for Phone Number-->
                     <div class="fv-row mb-8">
                         <input type="text" placeholder="Phone Number" name="phoneNumber" required autocomplete="off"
-                            class="form-control bg-transparent {{ $errors->has('phoneNumber') ? 'is-invalid' : '' }}" />
+                            class="form-control bg-transparent {{ $errors->has('phoneNumber') ? 'is-invalid' : '' }}"  value="{{ old('phoneNumber') }}"/>
                         @if ($errors->has('phoneNumber'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('phoneNumber') }}
@@ -54,7 +54,7 @@
                     <!--begin::Input group for Date of Birth-->
                     <div class="fv-row mb-8">
                         <input type="date" name="date_of_birth" required
-                            class="form-control bg-transparent {{ $errors->has('date_of_birth') ? 'is-invalid' : '' }}" />
+                            class="form-control bg-transparent {{ $errors->has('date_of_birth') ? 'is-invalid' : '' }}" value="{{ old('date_of_birth') }}"/>
                         @if ($errors->has('date_of_birth'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('date_of_birth') }}

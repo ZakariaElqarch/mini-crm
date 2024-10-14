@@ -38,6 +38,10 @@
                     <div class="fw-bold mt-5">Company Phone</div>
                     <div class="text-gray-600">{{ $company->phone ?? 'Not provided' }}</div>
                     <!--end::Details item-->
+                     <!--begin::Details item-->
+                     <div class="fw-bold mt-5">Company Description</div>
+                     <div class="text-gray-600">{{ $company->description ?? 'Not provided' }}</div>
+                     <!--end::Details item-->
                     <!--begin::Details item-->
                     <div class="fw-bold mt-5">Employees</div>
                     <div class="text-gray-600">{{ $verifiedEmployees->count() }}</div>
