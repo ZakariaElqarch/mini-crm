@@ -36,14 +36,14 @@ class EmployeeAuthController extends Controller
         if ($employee && !$employee->verified) {
             return back()->withErrors([
                 'email' => ['Your account is not verified. Please check your email for verification.'],
-            ])->withInput();  // Add withInput() to return old input values
+            ])->withInput();  
         }
     
         // Attempt to log in the employee
         if (!Auth::guard('employee')->attempt($request->only('email', 'password'))) {
             return back()->withErrors([
                 'email' => ['The provided credentials are incorrect.'],
-            ])->withInput();  // Add withInput() to return old input values
+            ])->withInput();  
         }
     
         // Redirect to employee dashboard if successful

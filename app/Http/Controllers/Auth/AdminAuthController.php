@@ -23,24 +23,28 @@ class AdminAuthController extends Controller
         // Regenerate the CSRF token
         $request->session()->regenerateToken();
 
+        // Validate the request data
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
+        // Attempt to log in the admin
         if (!Auth::guard('admin')->attempt($request->only('email', 'password'))) {
-            throw ValidationException::withMessages([
+            return back()->withErrors([
                 'email' => ['The provided credentials are incorrect.'],
-            ]);
+            ])->withInput(); 
         }
 
-        return redirect()->route('admin.dashboard'); // Redirect to admin dashboard
+        // Redirect to admin dashboard if successful
+        return redirect()->route('admin.dashboard');
     }
+
 
     public function logout(Request $request)
     {
         Auth::guard('admin')->logout();
-        
+
         // Invalidate the current session
         $request->session()->invalidate();
 

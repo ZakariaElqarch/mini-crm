@@ -28,7 +28,7 @@
 
                 <!--begin::Input group-->
                 <div class="fv-row mb-8">
-                    <input type="email" placeholder="Email" name="email" value="admin@example.com" autocomplete="off"
+                    <input type="email" placeholder="Email" name="email" value="{{ old('email', 'admin@example.com') }}" autocomplete="off"
                         class="form-control bg-transparent {{ $errors->has('email') ? 'is-invalid' : '' }}" />
                     @if ($errors->has('email'))
                         <div class="invalid-feedback">
@@ -39,7 +39,7 @@
                 <!--end::Input group-->
 
                 <div class="fv-row mb-3">
-                    <input type="password" placeholder="Password" name="password" autocomplete="off" value="password"
+                    <input type="password" placeholder="Password" name="password" autocomplete="off" value="{{ old('password', 'password') }}"
                         class="form-control bg-transparent {{ $errors->has('password') ? 'is-invalid' : '' }}" />
                     @if ($errors->has('password'))
                         <div class="invalid-feedback">
